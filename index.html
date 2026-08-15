@@ -822,83 +822,8 @@
         <button class="see-all">See all</button>
       </div>
 
-      <div class="cards">
-
-        <div
-          class="card"
-          data-song="Midnight Drive"
-          data-artist="VYBE"
-          onclick="selectSong(this)"
-        >
-
-          <div class="cover">
-            <div class="cover-symbol">V</div>
-          </div>
-
-          <div class="card-title">Midnight Drive</div>
-          <div class="artist">VYBE</div>
-
-          <button class="play-card">▶</button>
-
-        </div>
-
-
-        <div
-          class="card"
-          data-song="After Hours"
-          data-artist="VYBE"
-          onclick="selectSong(this)"
-        >
-
-          <div class="cover">
-            <div class="cover-symbol">◈</div>
-          </div>
-
-          <div class="card-title">After Hours</div>
-          <div class="artist">VYBE</div>
-
-          <button class="play-card">▶</button>
-
-        </div>
-
-
-        <div
-          class="card"
-          data-song="Lost In The City"
-          data-artist="VYBE"
-          onclick="selectSong(this)"
-        >
-
-          <div class="cover">
-            <div class="cover-symbol">◆</div>
-          </div>
-
-          <div class="card-title">Lost In The City</div>
-          <div class="artist">VYBE</div>
-
-          <button class="play-card">▶</button>
-
-        </div>
-
-
-        <div
-          class="card"
-          data-song="Slow Motion"
-          data-artist="VYBE"
-          onclick="selectSong(this)"
-        >
-
-          <div class="cover">
-            <div class="cover-symbol">V</div>
-          </div>
-
-          <div class="card-title">Slow Motion</div>
-          <div class="artist">VYBE</div>
-
-          <button class="play-card">▶</button>
-
-        </div>
-
+      <div class="cards" id="quickPicksCards">
+        <!-- songs will be inserted here by supabase.js -->
       </div>
 
     </section>
@@ -1120,6 +1045,8 @@
 
       const artist = card.dataset.artist;
 
+      const audioUrl = card.dataset.audio;
+
       selectedSong = {
         song,
         artist
@@ -1129,20 +1056,15 @@
 
       currentArtist.textContent = artist;
 
-      /*
-        REAL AUDIO WILL BE CONNECTED HERE.
-
-        Later we'll load the actual
-        Supabase Storage URL:
-
-        audio.src = "YOUR_SUPABASE_AUDIO_URL";
-
-        Then:
-
+      if (audioUrl) {
+        audio.src = audioUrl;
         audio.play();
-      */
-
-      playButton.textContent = "▶";
+        playButton.textContent = "❚❚";
+      } else {
+        audio.removeAttribute("src");
+        playButton.textContent = "▶";
+        console.warn("No audio URL for:", song);
+      }
 
       console.log("Selected:", song, artist);
 
@@ -1271,15 +1193,17 @@
 
     const search = document.getElementById("search");
 
-    const cards =
-      document.querySelectorAll(".card");
+    function refreshSearchCards() {
+      window.allCards = document.querySelectorAll(".card");
+    }
+    refreshSearchCards();
 
     search.addEventListener("input", () => {
 
       const query =
         search.value.toLowerCase().trim();
 
-      cards.forEach(card => {
+      window.allCards.forEach(card => {
 
         const title =
           card.dataset.song ||
