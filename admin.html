@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VYBE — Admin</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #0b0b0d;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .admin {
+      width: 100%;
+      max-width: 500px;
+      background: #151518;
+      border: 1px solid #29292e;
+      border-radius: 20px;
+      padding: 28px;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    .subtitle {
+      color: #888;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin: 18px 0 8px;
+      color: #ccc;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border-radius: 10px;
+      border: 1px solid #333;
+      background: #0d0d0f;
+      color: white;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 25px;
+      padding: 14px;
+      border: 0;
+      border-radius: 12px;
+      background: white;
+      color: black;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    #status {
+      margin-top: 18px;
+      color: #aaa;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="admin">
+    <h1>VYBE Admin</h1>
+    <div class="subtitle">Add a song to your library</div>
+
+    <label>Song title</label>
+    <input id="title" type="text" placeholder="Song title">
+
+    <label>Artist</label>
+    <input id="artist" type="text" placeholder="Artist name">
+
+    <label>Album</label>
+    <input id="album" type="text" placeholder="Album name">
+
+    <label>Cover image</label>
+    <input id="cover" type="file" accept="image/*">
+
+    <label>Audio file</label>
+    <input id="audio" type="file" accept="audio/*">
+
+    <button id="uploadBtn">UPLOAD SONG</button>
+
+    <div id="status"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="supabase.js"></script>
+
+</body>
+</html>
