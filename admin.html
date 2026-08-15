@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>VYBE — Admin</title>
 
   <style>
@@ -32,7 +33,7 @@
     }
 
     h1 {
-      margin-top: 0;
+      margin: 0 0 6px;
     }
 
     .subtitle {
@@ -53,7 +54,6 @@
       border: 1px solid #333;
       background: #0d0d0f;
       color: white;
-      outline: none;
     }
 
     button {
@@ -68,10 +68,16 @@
       cursor: pointer;
     }
 
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     #status {
       margin-top: 18px;
       color: #aaa;
       text-align: center;
+      line-height: 1.5;
     }
   </style>
 </head>
@@ -79,6 +85,7 @@
 <body>
 
   <div class="admin">
+
     <h1>VYBE Admin</h1>
     <div class="subtitle">Add a song to your library</div>
 
@@ -100,11 +107,174 @@
     <button id="uploadBtn">UPLOAD SONG</button>
 
     <div id="status"></div>
+
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="supabase.js"></script>
+
+  <script>
+
+    const uploadBtn = document.getElementById("uploadBtn");
+    const status = document.getElementById("status");
+
+    uploadBtn.addEventListener("click", uploadSong);
+
+    async function uploadSong() {
+
+      const title = document.getElementById("title").value.trim();
+      const artist = document.getElementById("artist").value.trim();
+      const album = document.getElementById("album").value.trim();
+
+      const coverFile = document.getElementById("cover").files[0];
+      const audioFile = document.getElementById("audio").files[0];
+
+      if (!title || !artist || !audioFile) {
+        status.textContent = "Please enter the title, artist and audio file.";
+        return;
+      }
+
+      uploadBtn.disabled = true;
+      status.textContent = "Checking login...";
+
+      try {
+
+        // Check whether the user is logged in
+        const {
+          data: { user },
+          error: userError
+        } = await supabaseClient.auth.getUser();
+
+        if (userError || !user) {
+          throw new Error("You must be logged in to upload songs.");
+        }
+
+        const timestamp = Date.now();
+
+        // -------------------------
+        // Upload cover
+        // -------------------------
+
+        let coverPath = null;
+
+        if (coverFile) {
+
+          const coverExtension =
+            coverFile.name.split(".").pop().toLowerCase();
+
+          coverPath =
+            `${timestamp}-cover.${coverExtension}`;
+
+          status.textContent = "Uploading cover...";
+
+          const { error: coverError } =
+            await supabaseClient.storage
+              .from("covers")
+              .upload(coverPath, coverFile, {
+                cacheControl: "3600",
+                upsert: false
+              });
+
+          if (coverError) {
+            throw coverError;
+          }
+        }
+
+        // -------------------------
+        // Upload audio
+        // -------------------------
+
+        const audioExtension =
+          audioFile.name.split(".").pop().toLowerCase();
+
+        const audioPath =
+          `${timestamp}-audio.${audioExtension}`;
+
+        status.textContent = "Uploading music...";
+
+        const { error: audioError } =
+          await supabaseClient.storage
+            .from("music")
+            .upload(audioPath, audioFile, {
+              cacheControl: "3600",
+              upsert: false
+            });
+
+        if (audioError) {
+          throw audioError;
+        }
+
+        // -------------------------
+        // Get public URLs
+        // -------------------------
+
+        let coverUrl = null;
+
+        if (coverPath) {
+
+          const {
+            data: coverData
+          } = supabaseClient.storage
+            .from("covers")
+            .getPublicUrl(coverPath);
+
+          coverUrl = coverData.publicUrl;
+        }
+
+        const {
+          data: audioData
+        } = supabaseClient.storage
+          .from("music")
+          .getPublicUrl(audioPath);
+
+        const audioUrl = audioData.publicUrl;
+
+        // -------------------------
+        // Add song to database
+        // -------------------------
+
+        status.textContent = "Saving song information...";
+
+        const { error: databaseError } =
+          await supabaseClient
+            .from("songs")
+            .insert({
+              title: title,
+              artist: artist,
+              album: album || null,
+              cover_url: coverUrl,
+              audio_url: audioUrl
+            });
+
+        if (databaseError) {
+          throw databaseError;
+        }
+
+        status.textContent = "✅ Song uploaded successfully!";
+
+        // Clear form
+        document.getElementById("title").value = "";
+        document.getElementById("artist").value = "";
+        document.getElementById("album").value = "";
+        document.getElementById("cover").value = "";
+        document.getElementById("audio").value = "";
+
+      } catch (error) {
+
+        console.error("Upload error:", error);
+
+        status.textContent =
+          "❌ " + (error.message || "Something went wrong.");
+
+      } finally {
+
+        uploadBtn.disabled = false;
+
+      }
+    }
+
+  </script>
 
 </body>
 </html>
