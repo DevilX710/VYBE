@@ -1,9 +1,7 @@
 // VYBE 2.0 — Audius music search + streaming
-// This file is intentionally independent of Supabase so your existing
-// uploaded-song system can continue to work.
+// Independent of Supabase so your existing uploaded-song system keeps working.
 
 const VYBE_AUDIUS_BASE = "https://api.audius.co/v1";
-
 let vybeAudiusResults = [];
 
 function audiusArtwork(track) {
@@ -30,7 +28,6 @@ function audiusCard(track) {
 
   const cover = document.createElement("div");
   cover.className = "cover";
-
   const artwork = audiusArtwork(track);
   if (artwork) {
     const img = document.createElement("img");
@@ -62,8 +59,8 @@ function audiusCard(track) {
   play.type = "button";
   play.textContent = "▶";
   play.title = "Play";
-  play.addEventListener("click", e => {
-    e.stopPropagation();
+  play.addEventListener("click", event => {
+    event.stopPropagation();
     if (typeof selectSong === "function") selectSong(card);
   });
 
@@ -84,17 +81,23 @@ async function searchAudius(query) {
   if (!response.ok) throw new Error(`Audius search failed: ${response.status}`);
 
   const json = await response.json();
-  return Array.isArray(json.data) ? json.data.filter(t => t?.id && t?.isStreamable !== false) : [];
+  return Array.isArray(json.data)
+    ? json.data.filter(track => track?.id && track?.isStreamable !== false && track?.isStreamable !== "false")
+    : [];
 }
 
 function findVYBESearchInput() {
-  return document.querySelector(
-    '#search, .search, input[type="search"], input[placeholder*="Search" i], input[placeholder*="song" i]'
-  );
+  return document.querySelector('#search, .search, input[type="search"], input[placeholder*="Search" i], input[placeholder*="song" i]');
 }
 
 function findVYBESearchContainer() {
   return document.getElementById("quickPicksCards") || document.querySelector(".cards");
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>\'"]/g, character => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", "'":"&#39;", "\"":"&quot;"
+  }[character]));
 }
 
 function renderAudiusResults(results, query) {
@@ -102,7 +105,6 @@ function renderAudiusResults(results, query) {
   if (!container) return;
 
   container.innerHTML = "";
-
   if (!results.length) {
     container.innerHTML = `<div style="color:#888;padding:20px">No Audius tracks found for “${escapeHTML(query)}”.</div>`;
     return;
@@ -113,20 +115,17 @@ function renderAudiusResults(results, query) {
   container.appendChild(fragment);
 }
 
-function escapeHTML(value) {
-  return String(value).replace(/[&<>'"]/g, char => ({
-    "&":"&amp;", "<":"&lt;", ">":"&gt;", "'":"&#39;", "\"":"&quot;"
-  }[char]));
-}
-
 let audiusSearchTimer;
+let audiusSearchRequest = 0;
+
 function setupAudiusSearch() {
   const input = findVYBESearchInput();
   if (!input || input.dataset.audiusReady === "1") return;
   input.dataset.audiusReady = "1";
 
-  input.addEventListener("keydown", async event => {
+  input.addEventListener("keydown", event => {
     if (event.key !== "Enter") return;
+
     const query = input.value.trim();
     if (!query) return;
 
@@ -134,12 +133,18 @@ function setupAudiusSearch() {
     audiusSearchTimer = setTimeout(async () => {
       const container = findVYBESearchContainer();
       if (container) container.innerHTML = `<div style="color:#888;padding:20px">Searching Audius…</div>`;
+
+      const requestId = ++audiusSearchRequest;
       try {
-        vybeAudiusResults = await searchAudius(query);
-        renderAudiusResults(vybeAudiusResults, query);
+        const results = await searchAudius(query);
+        if (requestId !== audiusSearchRequest) return;
+        vybeAudiusResults = results;
+        renderAudiusResults(results, query);
       } catch (error) {
         console.error("VYBE Audius search error:", error);
-        if (container) container.innerHTML = `<div style="color:#ff7777;padding:20px">Audius search failed. Try again.</div>`;
+        if (requestId === audiusSearchRequest && container) {
+          container.innerHTML = `<div style="color:#ff7777;padding:20px">Audius search failed. Try again.</div>`;
+        }
       }
     }, 100);
   });
@@ -151,7 +156,6 @@ if (document.readyState === "loading") {
   setupAudiusSearch();
 }
 
-// Public helpers for future VYBE features.
 window.VYBE_AUDIUS = {
   search: searchAudius,
   streamUrl: audiusStreamUrl,
