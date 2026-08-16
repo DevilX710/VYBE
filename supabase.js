@@ -22,15 +22,20 @@ async function loadSongs() {
       Loading your music...
     </div>`;
 
+
   const { data, error } =
     await supabaseClient
       .from("songs")
       .select("*")
       .order("created_at", { ascending: false });
 
+
   if (error) {
 
-    console.error("Failed to load songs:", error);
+    console.error(
+      "Failed to load songs:",
+      error
+    );
 
     container.innerHTML =
       `<div style="color:#888;padding:20px">
@@ -40,7 +45,12 @@ async function loadSongs() {
     return;
   }
 
-  console.log("VYBE songs loaded:", data);
+
+  console.log(
+    "VYBE songs loaded:",
+    data
+  );
+
 
   if (!data || data.length === 0) {
 
@@ -57,7 +67,10 @@ async function loadSongs() {
   container.innerHTML = "";
 
 
-  // Create cards
+  // ======================================
+  // CREATE SONG CARDS
+  // ======================================
+
   data.forEach(song => {
 
     const card =
@@ -65,6 +78,8 @@ async function loadSongs() {
 
     card.className = "card";
 
+
+    // Song information
     card.dataset.song =
       song.title || "Unknown song";
 
@@ -74,6 +89,15 @@ async function loadSongs() {
     card.dataset.audio =
       song.audio_url || "";
 
+    // IMPORTANT:
+    // Store cover URL for the player
+    card.dataset.cover =
+      song.cover_url || "";
+
+
+    // ======================================
+    // COVER
+    // ======================================
 
     const cover =
       document.createElement("div");
@@ -86,15 +110,23 @@ async function loadSongs() {
       const image =
         document.createElement("img");
 
-      image.src = song.cover_url;
+      image.src =
+        song.cover_url;
 
       image.alt =
         song.title || "Song cover";
 
-      image.style.width = "100%";
-      image.style.height = "100%";
-      image.style.objectFit = "cover";
-      image.style.borderRadius = "8px";
+      image.style.width =
+        "100%";
+
+      image.style.height =
+        "100%";
+
+      image.style.objectFit =
+        "cover";
+
+      image.style.borderRadius =
+        "8px";
 
       cover.appendChild(image);
 
@@ -103,58 +135,93 @@ async function loadSongs() {
       const symbol =
         document.createElement("div");
 
-      symbol.className = "cover-symbol";
+      symbol.className =
+        "cover-symbol";
 
-      symbol.textContent = "♪";
+      symbol.textContent =
+        "♪";
 
       cover.appendChild(symbol);
     }
 
 
+    // ======================================
+    // TITLE
+    // ======================================
+
     const title =
       document.createElement("div");
 
-    title.className = "card-title";
+    title.className =
+      "card-title";
 
     title.textContent =
       song.title || "Unknown song";
 
 
+    // ======================================
+    // ARTIST
+    // ======================================
+
     const artist =
       document.createElement("div");
 
-    artist.className = "artist";
+    artist.className =
+      "artist";
 
     artist.textContent =
       song.artist || "Unknown artist";
 
 
+    // ======================================
+    // PLAY BUTTON
+    // ======================================
+
     const playButton =
       document.createElement("button");
 
-    playButton.className = "play-card";
+    playButton.className =
+      "play-card";
 
-    playButton.textContent = "▶";
+    playButton.textContent =
+      "▶";
 
-    playButton.onclick = (event) => {
 
-      event.stopPropagation();
+    playButton.onclick =
+      (event) => {
 
-      selectSong(card);
+        event.stopPropagation();
 
-    };
+        selectSong(card);
 
+      };
+
+
+    // ======================================
+    // ADD ELEMENTS
+    // ======================================
 
     card.appendChild(cover);
+
     card.appendChild(title);
+
     card.appendChild(artist);
+
     card.appendChild(playButton);
 
 
-    // Clicking the card also plays it
-    card.addEventListener("click", () => {
-      selectSong(card);
-    });
+    // ======================================
+    // CLICK CARD
+    // ======================================
+
+    card.addEventListener(
+      "click",
+      () => {
+
+        selectSong(card);
+
+      }
+    );
 
 
     container.appendChild(card);
@@ -162,10 +229,19 @@ async function loadSongs() {
   });
 
 
-  // Update search cards
-  if (typeof refreshSearchCards === "function") {
+  // ======================================
+  // UPDATE SEARCH
+  // ======================================
+
+  if (
+    typeof refreshSearchCards ===
+    "function"
+  ) {
+
     refreshSearchCards();
+
   }
+
 }
 
 
