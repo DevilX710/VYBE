@@ -1,15 +1,8 @@
-const { createClient } = supabase;
-
-const supabaseClient = createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
-
-console.log("VYBE Supabase connected");
-
 // ======================================
-// LOAD SONGS
+// VYBE SONG LOADER
 // ======================================
+
+console.log("VYBE song loader starting...");
 
 async function loadSongs() {
 
@@ -28,15 +21,35 @@ async function loadSongs() {
 
   try {
 
-    console.log("VYBE: requesting songs...");
+    // Make sure the URL is a clean Supabase project URL
+    const baseUrl = SUPABASE_URL
+      .replace(/\/rest\/v1\/?$/, "")
+      .replace(/\/$/, "");
 
-    const { data, error } = await supabaseClient
-      .from("songs")
-      .select("*")
-      .order("created_at", { ascending: false });
+    const endpoint =
+      `${baseUrl}/rest/v1/songs?select=*&order=created_at.desc`;
 
-    if (error) {
-      console.error("VYBE songs error:", error);
+    console.log("VYBE requesting:", endpoint);
+
+    const response = await fetch(endpoint, {
+      method: "GET",
+      headers: {
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+      }
+    });
+
+    console.log("VYBE response:", response.status);
+
+    if (!response.ok) {
+
+      const errorText = await response.text();
+
+      console.error(
+        "VYBE Supabase error:",
+        response.status,
+        errorText
+      );
 
       container.innerHTML = `
         <div style="color:#ff7777;padding:20px">
@@ -47,10 +60,12 @@ async function loadSongs() {
       return;
     }
 
-    console.log("VYBE songs received:", data);
-    console.log("VYBE song count:", data ? data.length : 0);
+    const songs = await response.json();
 
-    if (!data || data.length === 0) {
+    console.log("VYBE songs received:", songs);
+    console.log("VYBE song count:", songs.length);
+
+    if (!Array.isArray(songs) || songs.length === 0) {
 
       container.innerHTML = `
         <div style="color:#888;padding:20px">
@@ -61,14 +76,14 @@ async function loadSongs() {
       return;
     }
 
-    // Clear loading state
+    // Clear loading
     container.innerHTML = "";
 
     // ======================================
     // CREATE SONG CARDS
     // ======================================
 
-    data.forEach((song) => {
+    songs.forEach(song => {
 
       const card = document.createElement("div");
 
@@ -83,77 +98,55 @@ async function loadSongs() {
       card.dataset.audio =
         song.audio_url || "";
 
-      // --------------------------------------
       // COVER
-      // --------------------------------------
-
       const cover = document.createElement("div");
 
       cover.className = "cover";
 
       if (song.cover_url) {
 
-        const image = document.createElement("img");
+        const img = document.createElement("img");
 
-        image.src = song.cover_url;
+        img.src = song.cover_url;
+        img.alt = song.title || "Song cover";
 
-        image.alt =
-          song.title || "Song cover";
+        img.style.width = "100%";
+        img.style.height = "100%";
+        img.style.objectFit = "cover";
+        img.style.borderRadius = "8px";
 
-        image.style.width = "100%";
-        image.style.height = "100%";
-        image.style.objectFit = "cover";
-        image.style.borderRadius = "8px";
-
-        cover.appendChild(image);
+        cover.appendChild(img);
 
       } else {
 
-        const symbol =
-          document.createElement("div");
+        const symbol = document.createElement("div");
 
         symbol.className = "cover-symbol";
-
         symbol.textContent = "♪";
 
         cover.appendChild(symbol);
       }
 
-      // --------------------------------------
       // TITLE
-      // --------------------------------------
-
-      const title =
-        document.createElement("div");
+      const title = document.createElement("div");
 
       title.className = "card-title";
-
       title.textContent =
         song.title || "Unknown song";
 
-      // --------------------------------------
       // ARTIST
-      // --------------------------------------
-
-      const artist =
-        document.createElement("div");
+      const artist = document.createElement("div");
 
       artist.className = "artist";
-
       artist.textContent =
         song.artist || "Unknown artist";
 
-      // --------------------------------------
       // PLAY BUTTON
-      // --------------------------------------
-
       const playButton =
         document.createElement("button");
 
       playButton.className = "play-card";
-
       playButton.type = "button";
-
       playButton.textContent = "▶";
 
       playButton.addEventListener("click", function(event) {
@@ -166,10 +159,7 @@ async function loadSongs() {
 
       });
 
-      // --------------------------------------
       // CARD CLICK
-      // --------------------------------------
-
       card.addEventListener("click", function() {
 
         if (typeof selectSong === "function") {
@@ -178,10 +168,7 @@ async function loadSongs() {
 
       });
 
-      // --------------------------------------
-      // BUILD CARD
-      // --------------------------------------
-
+      // BUILD
       card.appendChild(cover);
       card.appendChild(title);
       card.appendChild(artist);
@@ -192,22 +179,17 @@ async function loadSongs() {
     });
 
     console.log(
-      "VYBE: created",
-      data.length,
-      "song cards"
+      `VYBE: ${songs.length} song cards created`
     );
 
-    // Update search system
+    // Refresh search if available
     if (typeof refreshSearchCards === "function") {
       refreshSearchCards();
     }
 
-  } catch (err) {
+  } catch (error) {
 
-    console.error(
-      "VYBE unexpected error:",
-      err
-    );
+    console.error("VYBE song loading failed:", error);
 
     container.innerHTML = `
       <div style="color:#ff7777;padding:20px">
@@ -219,7 +201,7 @@ async function loadSongs() {
 
 
 // ======================================
-// START AFTER DOM IS READY
+// START
 // ======================================
 
 if (document.readyState === "loading") {
