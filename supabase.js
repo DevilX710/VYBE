@@ -5,248 +5,232 @@ const supabaseClient = createClient(
   SUPABASE_ANON_KEY
 );
 
+console.log("VYBE Supabase connected");
 
 // ======================================
-// LOAD SONGS FROM SUPABASE
+// LOAD SONGS
 // ======================================
 
 async function loadSongs() {
 
-  const container =
-    document.getElementById("quickPicksCards");
+  const container = document.getElementById("quickPicksCards");
 
-  if (!container) return;
+  if (!container) {
+    console.error("VYBE: quickPicksCards not found");
+    return;
+  }
 
-  container.innerHTML =
-    `<div style="color:#888;padding:20px">
+  container.innerHTML = `
+    <div style="color:#888;padding:20px">
       Loading your music...
-    </div>`;
+    </div>
+  `;
 
+  try {
 
-  const { data, error } =
-    await supabaseClient
+    console.log("VYBE: requesting songs...");
+
+    const { data, error } = await supabaseClient
       .from("songs")
       .select("*")
       .order("created_at", { ascending: false });
 
+    if (error) {
+      console.error("VYBE songs error:", error);
 
-  if (error) {
+      container.innerHTML = `
+        <div style="color:#ff7777;padding:20px">
+          Couldn't load your music.
+        </div>
+      `;
 
-    console.error(
-      "Failed to load songs:",
-      error
-    );
-
-    container.innerHTML =
-      `<div style="color:#888;padding:20px">
-        Couldn't load songs.
-      </div>`;
-
-    return;
-  }
-
-
-  console.log(
-    "VYBE songs loaded:",
-    data
-  );
-
-
-  if (!data || data.length === 0) {
-
-    container.innerHTML =
-      `<div style="color:#888;padding:20px">
-        No songs in your library yet.
-      </div>`;
-
-    return;
-  }
-
-
-  // Clear loading message
-  container.innerHTML = "";
-
-
-  // ======================================
-  // CREATE SONG CARDS
-  // ======================================
-
-  data.forEach(song => {
-
-    const card =
-      document.createElement("div");
-
-    card.className = "card";
-
-
-    // Song information
-    card.dataset.song =
-      song.title || "Unknown song";
-
-    card.dataset.artist =
-      song.artist || "Unknown artist";
-
-    card.dataset.audio =
-      song.audio_url || "";
-
-    // IMPORTANT:
-    // Store cover URL for the player
-    card.dataset.cover =
-      song.cover_url || "";
-
-
-    // ======================================
-    // COVER
-    // ======================================
-
-    const cover =
-      document.createElement("div");
-
-    cover.className = "cover";
-
-
-    if (song.cover_url) {
-
-      const image =
-        document.createElement("img");
-
-      image.src =
-        song.cover_url;
-
-      image.alt =
-        song.title || "Song cover";
-
-      image.style.width =
-        "100%";
-
-      image.style.height =
-        "100%";
-
-      image.style.objectFit =
-        "cover";
-
-      image.style.borderRadius =
-        "8px";
-
-      cover.appendChild(image);
-
-    } else {
-
-      const symbol =
-        document.createElement("div");
-
-      symbol.className =
-        "cover-symbol";
-
-      symbol.textContent =
-        "♪";
-
-      cover.appendChild(symbol);
+      return;
     }
 
+    console.log("VYBE songs received:", data);
+    console.log("VYBE song count:", data ? data.length : 0);
+
+    if (!data || data.length === 0) {
+
+      container.innerHTML = `
+        <div style="color:#888;padding:20px">
+          No songs in your library yet.
+        </div>
+      `;
+
+      return;
+    }
+
+    // Clear loading state
+    container.innerHTML = "";
 
     // ======================================
-    // TITLE
+    // CREATE SONG CARDS
     // ======================================
 
-    const title =
-      document.createElement("div");
+    data.forEach((song) => {
 
-    title.className =
-      "card-title";
+      const card = document.createElement("div");
 
-    title.textContent =
-      song.title || "Unknown song";
+      card.className = "card";
 
+      card.dataset.song =
+        song.title || "Unknown song";
 
-    // ======================================
-    // ARTIST
-    // ======================================
+      card.dataset.artist =
+        song.artist || "Unknown artist";
 
-    const artist =
-      document.createElement("div");
+      card.dataset.audio =
+        song.audio_url || "";
 
-    artist.className =
-      "artist";
+      // --------------------------------------
+      // COVER
+      // --------------------------------------
 
-    artist.textContent =
-      song.artist || "Unknown artist";
+      const cover = document.createElement("div");
 
+      cover.className = "cover";
 
-    // ======================================
-    // PLAY BUTTON
-    // ======================================
+      if (song.cover_url) {
 
-    const playButton =
-      document.createElement("button");
+        const image = document.createElement("img");
 
-    playButton.className =
-      "play-card";
+        image.src = song.cover_url;
 
-    playButton.textContent =
-      "▶";
+        image.alt =
+          song.title || "Song cover";
 
+        image.style.width = "100%";
+        image.style.height = "100%";
+        image.style.objectFit = "cover";
+        image.style.borderRadius = "8px";
 
-    playButton.onclick =
-      (event) => {
+        cover.appendChild(image);
+
+      } else {
+
+        const symbol =
+          document.createElement("div");
+
+        symbol.className = "cover-symbol";
+
+        symbol.textContent = "♪";
+
+        cover.appendChild(symbol);
+      }
+
+      // --------------------------------------
+      // TITLE
+      // --------------------------------------
+
+      const title =
+        document.createElement("div");
+
+      title.className = "card-title";
+
+      title.textContent =
+        song.title || "Unknown song";
+
+      // --------------------------------------
+      // ARTIST
+      // --------------------------------------
+
+      const artist =
+        document.createElement("div");
+
+      artist.className = "artist";
+
+      artist.textContent =
+        song.artist || "Unknown artist";
+
+      // --------------------------------------
+      // PLAY BUTTON
+      // --------------------------------------
+
+      const playButton =
+        document.createElement("button");
+
+      playButton.className = "play-card";
+
+      playButton.type = "button";
+
+      playButton.textContent = "▶";
+
+      playButton.addEventListener("click", function(event) {
 
         event.stopPropagation();
 
-        selectSong(card);
+        if (typeof selectSong === "function") {
+          selectSong(card);
+        }
 
-      };
+      });
 
+      // --------------------------------------
+      // CARD CLICK
+      // --------------------------------------
 
-    // ======================================
-    // ADD ELEMENTS
-    // ======================================
+      card.addEventListener("click", function() {
 
-    card.appendChild(cover);
+        if (typeof selectSong === "function") {
+          selectSong(card);
+        }
 
-    card.appendChild(title);
+      });
 
-    card.appendChild(artist);
+      // --------------------------------------
+      // BUILD CARD
+      // --------------------------------------
 
-    card.appendChild(playButton);
+      card.appendChild(cover);
+      card.appendChild(title);
+      card.appendChild(artist);
+      card.appendChild(playButton);
 
+      container.appendChild(card);
 
-    // ======================================
-    // CLICK CARD
-    // ======================================
+    });
 
-    card.addEventListener(
-      "click",
-      () => {
-
-        selectSong(card);
-
-      }
+    console.log(
+      "VYBE: created",
+      data.length,
+      "song cards"
     );
 
+    // Update search system
+    if (typeof refreshSearchCards === "function") {
+      refreshSearchCards();
+    }
 
-    container.appendChild(card);
+  } catch (err) {
 
-  });
+    console.error(
+      "VYBE unexpected error:",
+      err
+    );
 
-
-  // ======================================
-  // UPDATE SEARCH
-  // ======================================
-
-  if (
-    typeof refreshSearchCards ===
-    "function"
-  ) {
-
-    refreshSearchCards();
-
+    container.innerHTML = `
+      <div style="color:#ff7777;padding:20px">
+        Something went wrong while loading music.
+      </div>
+    `;
   }
-
 }
 
 
 // ======================================
-// START
+// START AFTER DOM IS READY
 // ======================================
 
-loadSongs();
+if (document.readyState === "loading") {
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    loadSongs
+  );
+
+} else {
+
+  loadSongs();
+
+}
