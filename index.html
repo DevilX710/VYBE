@@ -4,8 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#111111">
+
+  <!-- iPhone / PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="VYBE">
 
   <link rel="icon" type="image/png" href="vybe-icon.png">
   <link rel="apple-touch-icon" href="vybe-icon.png">
@@ -13,6 +16,7 @@
   <title>VYBE — Music for your moment</title>
 
   <style>
+
     :root {
       --bg: #090909;
       --sidebar: #0d0d0d;
@@ -52,6 +56,7 @@
     button {
       cursor: pointer;
     }
+
 
     /* =========================
        SIDEBAR
@@ -137,6 +142,7 @@
       font-size: 18px;
     }
 
+
     /* =========================
        MAIN
     ========================= */
@@ -145,18 +151,21 @@
       margin-left: 245px;
       padding: 25px 35px 130px;
       min-height: 100vh;
+
       background:
         radial-gradient(
           circle at 70% 0%,
           rgba(217, 107, 36, 0.08),
           transparent 30%
         ),
+
         linear-gradient(
           180deg,
           #151515 0px,
           #0d0d0d 420px
         );
     }
+
 
     /* =========================
        TOP BAR
@@ -226,6 +235,7 @@
       font-size: 12px;
     }
 
+
     /* =========================
        HERO
     ========================= */
@@ -237,6 +247,7 @@
       margin-bottom: 38px;
       border-radius: 14px;
       overflow: hidden;
+
       background:
         linear-gradient(
           110deg,
@@ -244,6 +255,7 @@
           #131313 65%,
           #111111
         );
+
       border: 1px solid #252525;
     }
 
@@ -286,6 +298,7 @@
       font-size: 14px;
     }
 
+
     /* =========================
        SECTION
     ========================= */
@@ -318,13 +331,15 @@
       color: white;
     }
 
+
     /* =========================
        CARDS
     ========================= */
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+      grid-template-columns:
+        repeat(auto-fill, minmax(165px, 1fr));
       gap: 18px;
     }
 
@@ -354,6 +369,7 @@
       overflow: hidden;
       display: grid;
       place-items: center;
+
       background:
         linear-gradient(
           135deg,
@@ -398,26 +414,36 @@
       position: absolute;
       right: 18px;
       bottom: 65px;
+
       width: 43px;
       height: 43px;
+
       border: none;
       border-radius: 50%;
+
       background: var(--orange);
       color: white;
+
       font-size: 17px;
+
       display: flex;
       align-items: center;
       justify-content: center;
+
       opacity: 0;
       transform: translateY(7px);
+
       transition: 0.2s;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+
+      box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.35);
     }
 
     .card:hover .play-card {
       opacity: 1;
       transform: translateY(0);
     }
+
 
     /* =========================
        PLAYER
@@ -428,20 +454,28 @@
       left: 0;
       right: 0;
       bottom: 0;
+
       height: 88px;
+
       display: flex;
       align-items: center;
+
       gap: 20px;
       padding: 12px 22px;
+
       background: rgba(17, 17, 17, 0.97);
+
       border-top: 1px solid #292929;
+
       backdrop-filter: blur(15px);
+
       z-index: 100;
     }
 
     .now-playing {
       width: 27%;
       min-width: 190px;
+
       display: flex;
       align-items: center;
       gap: 12px;
@@ -451,12 +485,24 @@
       width: 54px;
       height: 54px;
       flex-shrink: 0;
+
       display: grid;
       place-items: center;
+
       border-radius: 5px;
+
       background: #202020;
       color: var(--orange);
+
       font-weight: 900;
+
+      overflow: hidden;
+    }
+
+    .mini-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .song-info {
@@ -466,6 +512,7 @@
     .song-info strong {
       display: block;
       font-size: 13px;
+
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -473,9 +520,13 @@
 
     .song-info small {
       display: block;
+
       color: #888;
+
       margin-top: 5px;
+
       font-size: 11px;
+
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -483,8 +534,10 @@
 
     .like-button {
       margin-left: auto;
+
       background: none;
       border: none;
+
       color: #888;
       font-size: 17px;
     }
@@ -503,31 +556,43 @@
       display: flex;
       align-items: center;
       justify-content: center;
+
       gap: 22px;
+
       margin-bottom: 8px;
     }
 
     .control {
       border: none;
       background: none;
+
       color: #aaa;
+
       font-size: 17px;
+
+      transition: 0.15s;
     }
 
     .control:hover {
       color: white;
+      transform: scale(1.1);
     }
 
     .main-play {
       width: 34px;
       height: 34px;
+
       border: none;
       border-radius: 50%;
+
       background: white;
       color: black;
+
       font-size: 14px;
+
       display: grid;
       place-items: center;
+
       transition: 0.15s;
     }
 
@@ -543,32 +608,44 @@
 
     .time {
       width: 34px;
+
       color: #777;
+
       font-size: 9px;
+
       text-align: center;
     }
 
     .progress {
       flex: 1;
+
       height: 4px;
+
       background: #3b3b3b;
+
       border-radius: 10px;
+
       cursor: pointer;
+
       overflow: hidden;
     }
 
     .progress-fill {
       width: 0%;
       height: 100%;
+
       background: var(--orange);
+
       border-radius: inherit;
     }
 
     .player-right {
       width: 20%;
+
       display: flex;
       justify-content: flex-end;
       align-items: center;
+
       gap: 14px;
     }
 
@@ -577,6 +654,7 @@
       accent-color: var(--orange);
     }
 
+
     /* =========================
        MOBILE NAV
     ========================= */
@@ -584,6 +662,7 @@
     .mobile-nav {
       display: none;
     }
+
 
     /* =========================
        MOBILE
@@ -626,7 +705,8 @@
       }
 
       .cards {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
         gap: 12px;
       }
 
@@ -637,15 +717,19 @@
       .play-card {
         opacity: 1;
         transform: none;
+
         width: 38px;
         height: 38px;
+
         right: 14px;
         bottom: 59px;
       }
 
       .player {
         height: 76px;
+
         padding: 8px 12px;
+
         gap: 10px;
       }
 
@@ -687,22 +771,31 @@
 
       .mobile-nav {
         position: fixed;
+
         display: flex;
+
         left: 0;
         right: 0;
         bottom: 76px;
+
         height: 54px;
+
         background: #101010;
+
         border-top: 1px solid #242424;
+
         justify-content: space-around;
         align-items: center;
+
         z-index: 90;
       }
 
       .mobile-nav button {
         border: none;
         background: none;
+
         color: #777;
+
         font-size: 20px;
       }
 
@@ -710,29 +803,39 @@
         color: var(--orange);
       }
 
-      .brand-mobile {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
     }
+
   </style>
 </head>
 
+
 <body>
 
+
   <!-- =========================
-       DESKTOP SIDEBAR
+       SIDEBAR
   ========================= -->
 
   <aside class="sidebar">
 
     <div class="brand">
-      <img src="vybe-icon.png" class="brand-icon" alt="VYBE">
-      <div class="brand-name">V<span>YBE</span></div>
+
+      <img
+        src="vybe-icon.png"
+        class="brand-icon"
+        alt="VYBE"
+      >
+
+      <div class="brand-name">
+        V<span>YBE</span>
+      </div>
+
     </div>
 
-    <div class="nav-title">Menu</div>
+
+    <div class="nav-title">
+      Menu
+    </div>
 
     <div class="nav-item active">
       <div class="nav-icon">⌂</div>
@@ -749,7 +852,10 @@
       Your Library
     </div>
 
-    <div class="nav-title">Your Music</div>
+
+    <div class="nav-title">
+      Your Music
+    </div>
 
     <div class="nav-item">
       <div class="nav-icon">＋</div>
@@ -770,10 +876,16 @@
 
   <main class="main">
 
+
+    <!-- TOPBAR -->
+
     <div class="topbar">
 
       <div class="search-wrapper">
-        <div class="search-icon">⌕</div>
+
+        <div class="search-icon">
+          ⌕
+        </div>
 
         <input
           id="search"
@@ -781,11 +893,18 @@
           type="text"
           placeholder="What do you want to play?"
         >
+
       </div>
 
+
       <div class="profile">
-        <div class="profile-avatar">G</div>
+
+        <div class="profile-avatar">
+          G
+        </div>
+
         Guest
+
       </div>
 
     </div>
@@ -801,7 +920,9 @@
           VYBE
         </div>
 
-        <h1>Music for your moment.</h1>
+        <h1>
+          Music for your moment.
+        </h1>
 
         <p>
           Discover music, build your playlists,
@@ -818,12 +939,25 @@
     <section class="section">
 
       <div class="section-header">
-        <h2>Quick picks</h2>
-        <button class="see-all">See all</button>
+
+        <h2>
+          Quick picks
+        </h2>
+
+        <button class="see-all">
+          See all
+        </button>
+
       </div>
 
-      <div class="cards" id="quickPicksCards">
-        <!-- songs will be inserted here by supabase.js -->
+
+      <div
+        class="cards"
+        id="quickPicksCards"
+      >
+
+        <!-- Supabase songs appear here -->
+
       </div>
 
     </section>
@@ -834,20 +968,36 @@
     <section class="section">
 
       <div class="section-header">
-        <h2>Made for you</h2>
-        <button class="see-all">See all</button>
+
+        <h2>
+          Made for you
+        </h2>
+
+        <button class="see-all">
+          See all
+        </button>
+
       </div>
+
 
       <div class="cards">
 
+
         <div class="card">
 
           <div class="cover">
-            <div class="cover-symbol">◉</div>
+            <div class="cover-symbol">
+              ◉
+            </div>
           </div>
 
-          <div class="card-title">Your Daily Mix</div>
-          <div class="artist">Made for you</div>
+          <div class="card-title">
+            Your Daily Mix
+          </div>
+
+          <div class="artist">
+            Made for you
+          </div>
 
         </div>
 
@@ -855,11 +1005,18 @@
         <div class="card">
 
           <div class="cover">
-            <div class="cover-symbol">V</div>
+            <div class="cover-symbol">
+              V
+            </div>
           </div>
 
-          <div class="card-title">Late Night VYBE</div>
-          <div class="artist">For your nights</div>
+          <div class="card-title">
+            Late Night VYBE
+          </div>
+
+          <div class="artist">
+            For your nights
+          </div>
 
         </div>
 
@@ -867,11 +1024,18 @@
         <div class="card">
 
           <div class="cover">
-            <div class="cover-symbol">✦</div>
+            <div class="cover-symbol">
+              ✦
+            </div>
           </div>
 
-          <div class="card-title">Focus</div>
-          <div class="artist">Stay in the zone</div>
+          <div class="card-title">
+            Focus
+          </div>
+
+          <div class="artist">
+            Stay in the zone
+          </div>
 
         </div>
 
@@ -879,13 +1043,21 @@
         <div class="card">
 
           <div class="cover">
-            <div class="cover-symbol">↗</div>
+            <div class="cover-symbol">
+              ↗
+            </div>
           </div>
 
-          <div class="card-title">Energy</div>
-          <div class="artist">Turn it up</div>
+          <div class="card-title">
+            Energy
+          </div>
+
+          <div class="artist">
+            Turn it up
+          </div>
 
         </div>
+
 
       </div>
 
@@ -900,10 +1072,21 @@
 
   <nav class="mobile-nav">
 
-    <button class="active">⌂</button>
-    <button>⌕</button>
-    <button>▣</button>
-    <button>♥</button>
+    <button class="active">
+      ⌂
+    </button>
+
+    <button>
+      ⌕
+    </button>
+
+    <button>
+      ▣
+    </button>
+
+    <button>
+      ♥
+    </button>
 
   </nav>
 
@@ -914,11 +1097,16 @@
 
   <div class="player">
 
+
     <div class="now-playing">
 
-      <div class="mini-cover">
+      <div
+        class="mini-cover"
+        id="miniCover"
+      >
         V
       </div>
+
 
       <div class="song-info">
 
@@ -932,6 +1120,7 @@
 
       </div>
 
+
       <button class="like-button">
         ♡
       </button>
@@ -941,46 +1130,100 @@
 
     <div class="player-center">
 
+
       <div class="controls">
 
-        <button class="control">↶</button>
 
-        <button class="control">⏮</button>
+        <!-- REWIND -->
+
+        <button
+          class="control"
+          id="rewindButton"
+          title="Back 10 seconds"
+        >
+          ↶
+        </button>
+
+
+        <!-- PREVIOUS -->
+
+        <button
+          class="control"
+          id="previousButton"
+          title="Previous song"
+        >
+          ⏮
+        </button>
+
+
+        <!-- PLAY -->
 
         <button
           class="main-play"
           id="playButton"
           onclick="togglePlay()"
+          title="Play / Pause"
         >
           ▶
         </button>
 
-        <button class="control">⏭</button>
 
-        <button class="control">↷</button>
+        <!-- NEXT -->
+
+        <button
+          class="control"
+          id="nextButton"
+          title="Next song"
+        >
+          ⏭
+        </button>
+
+
+        <!-- FORWARD -->
+
+        <button
+          class="control"
+          id="forwardButton"
+          title="Forward 10 seconds"
+        >
+          ↷
+        </button>
+
 
       </div>
 
 
       <div class="progress-row">
 
-        <div class="time" id="currentTime">
+
+        <div
+          class="time"
+          id="currentTime"
+        >
           0:00
         </div>
+
 
         <div
           class="progress"
           id="progress"
         >
+
           <div
             class="progress-fill"
             id="progressFill"
           ></div>
+
         </div>
 
-        <div class="time" id="duration">
+
+        <div
+          class="time"
+          id="duration"
+        >
           0:00
         </div>
+
 
       </div>
 
@@ -989,7 +1232,9 @@
 
     <div class="player-right">
 
-      <span>🔊</span>
+      <span>
+        🔊
+      </span>
 
       <input
         class="volume"
@@ -1011,220 +1256,626 @@
   <audio id="audio"></audio>
 
 
+  <!-- SUPABASE -->
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js"></script>
-<script src="supabase.js"></script>
-  
+
+  <script src="config.js"></script>
+
+  <script src="supabase.js"></script>
+
+
+  <!-- PLAYER LOGIC -->
+
   <script>
 
-    const audio = document.getElementById("audio");
+    const audio =
+      document.getElementById("audio");
 
-    const playButton = document.getElementById("playButton");
+    const playButton =
+      document.getElementById("playButton");
 
-    const currentSong = document.getElementById("currentSong");
+    const currentSong =
+      document.getElementById("currentSong");
 
-    const currentArtist = document.getElementById("currentArtist");
+    const currentArtist =
+      document.getElementById("currentArtist");
 
-    const progress = document.getElementById("progress");
+    const progress =
+      document.getElementById("progress");
 
-    const progressFill = document.getElementById("progressFill");
+    const progressFill =
+      document.getElementById("progressFill");
 
-    const currentTime = document.getElementById("currentTime");
+    const currentTime =
+      document.getElementById("currentTime");
 
-    const duration = document.getElementById("duration");
+    const duration =
+      document.getElementById("duration");
 
-    const volume = document.getElementById("volume");
+    const volume =
+      document.getElementById("volume");
+
+    const miniCover =
+      document.getElementById("miniCover");
 
 
     let selectedSong = null;
 
+    let currentCard = null;
+
+
+    // =========================
+    // SELECT SONG
+    // =========================
 
     function selectSong(card) {
 
-      const song = card.dataset.song;
+      currentCard = card;
 
-      const artist = card.dataset.artist;
+      const song =
+        card.dataset.song;
 
-      const audioUrl = card.dataset.audio;
+      const artist =
+        card.dataset.artist ||
+        "Unknown";
+
+      const audioUrl =
+        card.dataset.audio;
+
+      const coverUrl =
+        card.dataset.cover;
+
 
       selectedSong = {
         song,
-        artist
+        artist,
+        audioUrl,
+        coverUrl
       };
 
-      currentSong.textContent = song;
 
-      currentArtist.textContent = artist;
+      currentSong.textContent =
+        song;
+
+      currentArtist.textContent =
+        artist;
+
+
+      // Mini cover
+
+      if (coverUrl) {
+
+        miniCover.innerHTML =
+          `<img src="${coverUrl}" alt="">`;
+
+      } else {
+
+        miniCover.innerHTML =
+          "V";
+
+      }
+
+
+      // Audio
 
       if (audioUrl) {
-        audio.src = audioUrl;
-        audio.play();
-        playButton.textContent = "❚❚";
+
+        audio.src =
+          audioUrl;
+
+        audio.play()
+          .catch(error => {
+
+            console.warn(
+              "Playback was blocked:",
+              error
+            );
+
+          });
+
+        playButton.textContent =
+          "❚❚";
+
       } else {
+
         audio.removeAttribute("src");
-        playButton.textContent = "▶";
-        console.warn("No audio URL for:", song);
-      }
 
-      console.log("Selected:", song, artist);
+        playButton.textContent =
+          "▶";
 
-    }
-
-
-    function togglePlay() {
-
-      if (!selectedSong) {
-        alert("Choose a song first.");
-        return;
-      }
-
-      /*
-        For now there is no audio URL.
-
-        Once Supabase is connected,
-        this becomes:
-
-        audio.play();
-        audio.pause();
-      */
-
-      if (audio.src) {
-
-        if (audio.paused) {
-          audio.play();
-          playButton.textContent = "❚❚";
-        } else {
-          audio.pause();
-          playButton.textContent = "▶";
-        }
-
-      } else {
-
-        console.log(
-          "Audio not connected yet:",
-          selectedSong.song
+        console.warn(
+          "No audio URL for:",
+          song
         );
 
       }
 
+
+      console.log(
+        "Selected:",
+        song,
+        artist
+      );
+
     }
 
 
-    audio.addEventListener("play", () => {
-      playButton.textContent = "❚❚";
-    });
+    // =========================
+    // PLAY / PAUSE
+    // =========================
 
+    function togglePlay() {
 
-    audio.addEventListener("pause", () => {
-      playButton.textContent = "▶";
-    });
+      if (!selectedSong) {
 
+        alert(
+          "Choose a song first."
+        );
 
-    audio.addEventListener("timeupdate", () => {
+        return;
 
-      if (!audio.duration) return;
-
-      const percentage =
-        (audio.currentTime / audio.duration) * 100;
-
-      progressFill.style.width =
-        percentage + "%";
-
-      currentTime.textContent =
-        formatTime(audio.currentTime);
-
-    });
-
-
-    audio.addEventListener("loadedmetadata", () => {
-
-      duration.textContent =
-        formatTime(audio.duration);
-
-    });
-
-
-    progress.addEventListener("click", (event) => {
-
-      if (!audio.duration) return;
-
-      const rect =
-        progress.getBoundingClientRect();
-
-      const percentage =
-        (event.clientX - rect.left) /
-        rect.width;
-
-      audio.currentTime =
-        percentage * audio.duration;
-
-    });
-
-
-    volume.addEventListener("input", () => {
-
-      audio.volume = volume.value;
-
-    });
-
-
-    function formatTime(seconds) {
-
-      if (!seconds || isNaN(seconds)) {
-        return "0:00";
       }
 
+
+      if (audio.src) {
+
+        if (audio.paused) {
+
+          audio.play();
+
+        } else {
+
+          audio.pause();
+
+        }
+
+      }
+
+    }
+
+
+    // =========================
+    // REWIND 10 SECONDS
+    // =========================
+
+    document
+      .getElementById("rewindButton")
+      .addEventListener(
+        "click",
+        () => {
+
+          if (!audio.src) return;
+
+          audio.currentTime =
+            Math.max(
+              0,
+              audio.currentTime - 10
+            );
+
+        }
+      );
+
+
+    // =========================
+    // FORWARD 10 SECONDS
+    // =========================
+
+    document
+      .getElementById("forwardButton")
+      .addEventListener(
+        "click",
+        () => {
+
+          if (!audio.src) return;
+
+          audio.currentTime =
+            Math.min(
+              audio.duration || Infinity,
+              audio.currentTime + 10
+            );
+
+        }
+      );
+
+
+    // =========================
+    // GET SONG CARDS
+    // =========================
+
+    function getSongCards() {
+
+      return [
+        ...document.querySelectorAll(
+          "#quickPicksCards .card"
+        )
+      ];
+
+    }
+
+
+    // =========================
+    // PREVIOUS SONG
+    // =========================
+
+    document
+      .getElementById("previousButton")
+      .addEventListener(
+        "click",
+        () => {
+
+          const cards =
+            getSongCards();
+
+          if (!cards.length)
+            return;
+
+
+          let index =
+            cards.indexOf(
+              currentCard
+            );
+
+
+          if (index === -1) {
+
+            index = 0;
+
+          } else {
+
+            index--;
+
+          }
+
+
+          if (index < 0) {
+
+            index =
+              cards.length - 1;
+
+          }
+
+
+          selectSong(
+            cards[index]
+          );
+
+        }
+      );
+
+
+    // =========================
+    // NEXT SONG
+    // =========================
+
+    document
+      .getElementById("nextButton")
+      .addEventListener(
+        "click",
+        () => {
+
+          const cards =
+            getSongCards();
+
+          if (!cards.length)
+            return;
+
+
+          let index =
+            cards.indexOf(
+              currentCard
+            );
+
+
+          if (index === -1) {
+
+            index = 0;
+
+          } else {
+
+            index++;
+
+          }
+
+
+          if (
+            index >=
+            cards.length
+          ) {
+
+            index = 0;
+
+          }
+
+
+          selectSong(
+            cards[index]
+          );
+
+        }
+      );
+
+
+    // =========================
+    // AUTO NEXT SONG
+    // =========================
+
+    audio.addEventListener(
+      "ended",
+      () => {
+
+        const cards =
+          getSongCards();
+
+        if (!cards.length)
+          return;
+
+
+        let index =
+          cards.indexOf(
+            currentCard
+          );
+
+
+        index++;
+
+
+        if (
+          index >=
+          cards.length
+        ) {
+
+          index = 0;
+
+        }
+
+
+        selectSong(
+          cards[index]
+        );
+
+      }
+    );
+
+
+    // =========================
+    // PLAY EVENT
+    // =========================
+
+    audio.addEventListener(
+      "play",
+      () => {
+
+        playButton.textContent =
+          "❚❚";
+
+      }
+    );
+
+
+    // =========================
+    // PAUSE EVENT
+    // =========================
+
+    audio.addEventListener(
+      "pause",
+      () => {
+
+        playButton.textContent =
+          "▶";
+
+      }
+    );
+
+
+    // =========================
+    // TIME UPDATE
+    // =========================
+
+    audio.addEventListener(
+      "timeupdate",
+      () => {
+
+        if (!audio.duration)
+          return;
+
+
+        const percentage =
+          (
+            audio.currentTime /
+            audio.duration
+          ) * 100;
+
+
+        progressFill.style.width =
+          percentage + "%";
+
+
+        currentTime.textContent =
+          formatTime(
+            audio.currentTime
+          );
+
+      }
+    );
+
+
+    // =========================
+    // METADATA
+    // =========================
+
+    audio.addEventListener(
+      "loadedmetadata",
+      () => {
+
+        duration.textContent =
+          formatTime(
+            audio.duration
+          );
+
+      }
+    );
+
+
+    // =========================
+    // PROGRESS BAR
+    // =========================
+
+    progress.addEventListener(
+      "click",
+      (event) => {
+
+        if (!audio.duration)
+          return;
+
+
+        const rect =
+          progress.getBoundingClientRect();
+
+
+        const percentage =
+          (
+            event.clientX -
+            rect.left
+          ) / rect.width;
+
+
+        audio.currentTime =
+          percentage *
+          audio.duration;
+
+      }
+    );
+
+
+    // =========================
+    // VOLUME
+    // =========================
+
+    volume.addEventListener(
+      "input",
+      () => {
+
+        audio.volume =
+          volume.value;
+
+      }
+    );
+
+
+    // =========================
+    // FORMAT TIME
+    // =========================
+
+    function formatTime(
+      seconds
+    ) {
+
+      if (
+        !seconds ||
+        isNaN(seconds)
+      ) {
+
+        return "0:00";
+
+      }
+
+
       const minutes =
-        Math.floor(seconds / 60);
+        Math.floor(
+          seconds / 60
+        );
+
 
       const remaining =
-        Math.floor(seconds % 60)
+        Math.floor(
+          seconds % 60
+        )
         .toString()
-        .padStart(2, "0");
+        .padStart(
+          2,
+          "0"
+        );
+
 
       return `${minutes}:${remaining}`;
 
     }
 
 
-    /* =========================
-       SEARCH
-    ========================= */
+    // =========================
+    // SEARCH
+    // =========================
 
-    const search = document.getElementById("search");
+    const search =
+      document.getElementById(
+        "search"
+      );
+
 
     function refreshSearchCards() {
-      window.allCards = document.querySelectorAll(".card");
+
+      window.allCards =
+        document.querySelectorAll(
+          ".card"
+        );
+
     }
+
+
     refreshSearchCards();
 
-    search.addEventListener("input", () => {
 
-      const query =
-        search.value.toLowerCase().trim();
+    search.addEventListener(
+      "input",
+      () => {
 
-      window.allCards.forEach(card => {
+        const query =
+          search.value
+            .toLowerCase()
+            .trim();
 
-        const title =
-          card.dataset.song ||
-          card.querySelector(".card-title")?.textContent ||
-          "";
 
-        const artist =
-          card.dataset.artist ||
-          card.querySelector(".artist")?.textContent ||
-          "";
+        window.allCards.forEach(
+          card => {
 
-        const matches =
-          title.toLowerCase().includes(query) ||
-          artist.toLowerCase().includes(query);
+            const title =
+              card.dataset.song ||
+              card.querySelector(
+                ".card-title"
+              )?.textContent ||
+              "";
 
-        card.style.display =
-          matches ? "" : "none";
 
-      });
+            const artist =
+              card.dataset.artist ||
+              card.querySelector(
+                ".artist"
+              )?.textContent ||
+              "";
 
-    });
+
+            const matches =
+              title
+                .toLowerCase()
+                .includes(query) ||
+
+              artist
+                .toLowerCase()
+                .includes(query);
+
+
+            card.style.display =
+              matches
+                ? ""
+                : "none";
+
+          }
+        );
+
+      }
+    );
+
 
   </script>
 
